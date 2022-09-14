@@ -34,5 +34,14 @@ public class Aluno {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
     }
+
+    @Override
+    public String toString() {
+        String str = "Nome: " + getNome();
+        str += "Matricula: " + getMatricula();
+        str += "Data Nascimento: " + getDataNascimento();
+
+        return str;
+    }
     
 }

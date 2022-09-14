@@ -1,3 +1,9 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Arvore {
 
     private Node raiz;
@@ -92,17 +98,23 @@ public class Arvore {
                 pai.setDireita(atual.getEsquerda());
         }
 
-        else if(atual.getEsquerda() == null){
-            if(atual == raiz) raiz = atual.getEsquerda();
-            else if(filho_esq) pai.setEsquerda(atual.getDireita());
-            else pai.setDireita(atual.getDireita());
+        else if (atual.getEsquerda() == null) {
+            if (atual == raiz)
+                raiz = atual.getEsquerda();
+            else if (filho_esq)
+                pai.setEsquerda(atual.getDireita());
+            else
+                pai.setDireita(atual.getDireita());
         }
 
-        else{
+        else {
             Node sucessor = no_sucessor(atual);
-            if(atual == raiz) raiz = sucessor;
-            else if(filho_esq) pai.setEsquerda(sucessor);
-            else pai.setDireita(sucessor);
+            if (atual == raiz)
+                raiz = sucessor;
+            else if (filho_esq)
+                pai.setEsquerda(sucessor);
+            else
+                pai.setDireita(sucessor);
             sucessor.setEsquerda(atual.getEsquerda());
         }
         return true;
@@ -112,33 +124,56 @@ public class Arvore {
         Node paidosucessor = apaga;
         Node sucessor = apaga;
         Node atual = apaga.getDireita(); // vai para a subarvore a direita
-   
+
         while (atual != null) { // enquanto nao chegar no Nó mais a esquerda
-          paidosucessor = sucessor;
-          sucessor = atual;
-          atual = atual.getEsquerda(); // caminha para a esquerda
-        } 
+            paidosucessor = sucessor;
+            sucessor = atual;
+            atual = atual.getEsquerda(); // caminha para a esquerda
+        }
         // *********************************************************************************
-        // quando sair do while "sucessor" será o Nó mais a esquerda da subarvore a direita
-        // "paidosucessor" será o o pai de sucessor e "apaga" o Nó que deverá ser eliminado
+        // quando sair do while "sucessor" será o Nó mais a esquerda da subarvore a
+        // direita
+        // "paidosucessor" será o o pai de sucessor e "apaga" o Nó que deverá ser
+        // eliminado
         // *********************************************************************************
         if (sucessor != apaga.getDireita()) { // se sucessor nao é o filho a direita do Nó que deverá ser eliminado
-          paidosucessor.setEsquerda(sucessor.getDireita()); // pai herda os filhos do sucessor que sempre serão a direita
-          // lembrando que o sucessor nunca poderá ter filhos a esquerda, pois, ele sempre será o
-          // Nó mais a esquerda da subarvore a direita do Nó apaga.
-          // lembrando também que sucessor sempre será o filho a esquerda do pai
-   
-          sucessor.setDireita(apaga.getDireita());// guardando a referencia a direita do sucessor para 
-                                    // quando ele assumir a posição correta na arvore
+            paidosucessor.setEsquerda(sucessor.getDireita()); // pai herda os filhos do sucessor que sempre serão a
+                                                              // direita
+            // lembrando que o sucessor nunca poderá ter filhos a esquerda, pois, ele sempre
+            // será o
+            // Nó mais a esquerda da subarvore a direita do Nó apaga.
+            // lembrando também que sucessor sempre será o filho a esquerda do pai
+
+            sucessor.setDireita(apaga.getDireita());// guardando a referencia a direita do sucessor para
+            // quando ele assumir a posição correta na arvore
         }
         return sucessor;
-     }
+    }
 
-     public void exibir(Node atual) {
+    public void exibir(Node atual) {
         if (atual != null) {
-          exibir(atual.getEsquerda());
-          System.out.print(atual.getAluno().getNome() + " ");
-          exibir(atual.getDireita());
+            exibir(atual.getEsquerda());
+            System.out.print(atual.getAluno().getNome() + " ");
+            exibir(atual.getDireita());
         }
-      }
+    }
+
+    public static void salvarDados(List alunos) {
+        try (FileWriter fout = new FileWriter("alunos.txt");
+                BufferedWriter bout = new BufferedWriter(fout)) {
+
+            ArrayList<Aluno> alunoS = new ArrayList<>(alunos);
+
+            for (Aluno aluno : alunoS) {
+                bout.write("Nome: " + aluno.getNome() + "\n" + "Matricula: " + aluno.getMatricula() + "\n"
+                        + "Data de Nascimento: " + aluno.getDataNascimento() + "\n");
+                bout.newLine();
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar itens");
+        }
+
+    }
+
 }

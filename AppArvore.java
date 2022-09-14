@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -14,6 +16,8 @@ public class AppArvore {
         int ano;
         int matricula;
         Random random = new Random();
+
+        List<Aluno> alunos = new ArrayList<>();
 
         System.out.println("Arvore Binaria de Aluno");
 
@@ -35,7 +39,7 @@ public class AppArvore {
                     System.out.println("Informe os dados do aluno: ");
                     System.out.print("Nome do aluno: ");
                     nome = ler.next();
-                    
+
                     System.out.println("Data de nascimento: ");
                     System.out.print("Dia: ");
                     dia = ler.nextInt();
@@ -45,19 +49,34 @@ public class AppArvore {
                     ano = ler.nextInt();
 
                     novoAluno = new Aluno(Integer.toString(matricula), nome, new DataNascimento(dia, mes, ano));
+                    alunos.add(novoAluno);
 
                     System.out.println("A matricula desse aluno é: " + matricula);
                     System.out.println("Digite 1 para continuar");
                     String pausa = ler.next();
                     arvore.adicionar(novoAluno);
+
+                    Arvore.salvarDados(alunos);
+
                     break;
                 }
                 case 2: {
                     System.out.println("Informe o numero da matricula do aluno que deseja remover");
                     matricula = ler.nextInt();
                     String matriculaS = matricula + "";
-                    if (arvore.remover(matriculaS))
+                    if (arvore.remover(matriculaS)){
                         System.out.println("Aluno removido com sucesso");
+                        for (Aluno aluno : alunos) {
+                            if(matriculaS.equals(aluno.getMatricula())){
+                                alunos.remove(aluno);
+                                Arvore.salvarDados(alunos);
+                            } 
+
+                        }
+                            
+                        
+
+                    }
 
                     else
                         System.out.println("Aluno nao encontrado");
@@ -65,18 +84,17 @@ public class AppArvore {
                     break;
                 }
                 case 3: {
-                    
+
                     System.out.println("Qual o numero da matricula do aluno que deseja buscar? \n>");
                     matricula = ler.nextInt();
                     String matriculaS = matricula + "";
 
                     Node aluno = arvore.buscar(matriculaS);
 
-                    if (aluno != null){
+                    if (aluno != null) {
                         System.out.print("\n Valor Encontrado: ");
                         System.out.println(aluno.getAluno().getNome());
-                    }
-                    else
+                    } else
                         System.out.print("\n Valor nao encontrado!");
                     break;
                 }
@@ -89,4 +107,5 @@ public class AppArvore {
             } // fim switch
         } while (opcao != 5);
     }
+
 }
