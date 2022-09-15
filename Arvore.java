@@ -1,4 +1,6 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,22 +18,22 @@ public class Arvore {
         Node novoNo = new Node(novoAluno);
 
         if (raiz == null) {
-            this.raiz = novoNo;
+            this.raiz = novoNo; // arvore n existe
         } else {
             Node atual = raiz;
             Node anterior;
             while (true) {
                 anterior = atual;
-                if (Integer.parseInt(novoAluno.getMatricula()) <= Integer.parseInt(atual.getAluno().getMatricula())) {
-                    atual = atual.getEsquerda();
-                    if (atual == null) {
+                if (Integer.parseInt(novoAluno.getMatricula()) <= Integer.parseInt(atual.getAluno().getMatricula())) { // Se a matricula do novo aluno for menor do 
+                    atual = atual.getEsquerda();                                                                       // atual a ser comparado, vai para esquerda
+                    if (atual == null) { // se o atual for nulo, chegou no final da árvore, e o novo aluno vira a folha 
                         anterior.setEsquerda(novoNo);
                         return;
                     }
-                } else {
+                } else { // se for maior para direita
                     atual = atual.getDireita();
-                    if (atual == null) {
-                        anterior.setDireita(novoNo);
+                    if (atual == null) { // se o atual for nulo, chegou no final da árvore, e o novo aluno vira a folha 
+                        anterior.setDireita(novoNo); 
                         return;
                     }
                 }
@@ -54,8 +56,8 @@ public class Arvore {
             else
                 atual = atual.getDireita(); // caminha para direita
             if (atual == null)
-                return null; // encontrou uma folha -> sai
-        } // fim laço while
+                return null; // se nao encontrou nada, retorna null
+        } 
         return atual; // terminou o laço while e chegou aqui é pq encontrou item
     }
 
@@ -63,47 +65,47 @@ public class Arvore {
         if (raiz == null)
             return false;
 
-        Node atual = raiz;
-        Node pai = raiz;
-        Boolean filho_esq = true;
+        Node atual = raiz; // nó a ser comparado
+        Node pai = raiz; // nó anterior do comparado
+        Boolean filho_esq = true; // se existe esquerda
 
-        while (!atual.getAluno().getMatricula().equals(matricula)) {
+        while (!atual.getAluno().getMatricula().equals(matricula)) { // enquanto a matricula do no atual a ser comparado é diferente da matricula a ser comparado
             pai = atual;
-            if (Integer.parseInt(matricula) < Integer.parseInt(atual.getAluno().getMatricula())) {
-                atual = atual.getEsquerda();
+            if (Integer.parseInt(matricula) < Integer.parseInt(atual.getAluno().getMatricula())) { // se for menor, corre para esquerda
+                atual = atual.getEsquerda(); 
                 filho_esq = true;
-            } else {
+            } else { // se for maior, corre para direita
                 atual = atual.getDireita();
                 filho_esq = false;
             }
-            if (atual == null)
+            if (atual == null) // se nao encontrou nada, retorna falso
                 return false;
         }
 
-        if (atual.getEsquerda() == null && atual.getDireita() == null) {
-            if (atual == raiz)
+        if (atual.getEsquerda() == null && atual.getDireita() == null) { // se nao exitir filhos a esquerda ou direita
+            if (atual == raiz) // se for a raiz, então ele remove o valor da raiz, pois existe apenas esse valor
                 raiz = null;
-            else if (filho_esq)
-                pai.setEsquerda(null);
-            else
+            else if (filho_esq) // se ele for filho da esquerda
+                pai.setEsquerda(null); // ele irá apagar o valor, a partir do pai dele
+            else // se for filho da fireita
                 pai.setDireita(null);
         }
 
-        else if (atual.getDireita() == null) {
-            if (atual == raiz)
-                raiz = atual.getEsquerda();
-            else if (filho_esq)
-                pai.setEsquerda(atual.getEsquerda());
-            else
-                pai.setDireita(atual.getEsquerda());
+        else if (atual.getDireita() == null) { // se nao existir filho a direita, apenas existir na esquerda
+            if (atual == raiz) // se o no atual for raiz, recebe o filho da esquerda e o filho da esquerda vira a raiz
+                raiz = atual.getEsquerda();  
+            else if (filho_esq) // se ele for filho da esquerda
+                pai.setEsquerda(atual.getEsquerda()); // ele ira alterar o valor dele a partir do pai, o valor dele será alterado para o filho da esquerda( trazendo toda arvore junto)
+            else // se ele for filho da direita
+                pai.setDireita(atual.getEsquerda()); 
         }
 
-        else if (atual.getEsquerda() == null) {
-            if (atual == raiz)
-                raiz = atual.getEsquerda();
-            else if (filho_esq)
-                pai.setEsquerda(atual.getDireita());
-            else
+        else if (atual.getEsquerda() == null) { // se nao existir filho na esquerda, apenas existir na direita
+            if (atual == raiz) // se o no atual for raiz, recebe o filho da direita e o filho da direita vira a raiz
+                raiz = atual.getDireita();
+            else if (filho_esq) // se ele for filho da esquerda
+                pai.setEsquerda(atual.getDireita());  // ele ira alterar o valor dele a partir do pai, o valor dele será alterado para o filho da direita( trazendo toda arvore junto)
+            else // se ele for filho da direita
                 pai.setDireita(atual.getDireita());
         }
 
@@ -130,12 +132,6 @@ public class Arvore {
             sucessor = atual;
             atual = atual.getEsquerda(); // caminha para a esquerda
         }
-        // *********************************************************************************
-        // quando sair do while "sucessor" será o Nó mais a esquerda da subarvore a
-        // direita
-        // "paidosucessor" será o o pai de sucessor e "apaga" o Nó que deverá ser
-        // eliminado
-        // *********************************************************************************
         if (sucessor != apaga.getDireita()) { // se sucessor nao é o filho a direita do Nó que deverá ser eliminado
             paidosucessor.setEsquerda(sucessor.getDireita()); // pai herda os filhos do sucessor que sempre serão a
                                                               // direita
@@ -173,6 +169,31 @@ public class Arvore {
         } catch (IOException e) {
             System.out.println("Erro ao salvar itens");
         }
+
+    }
+
+    public void carregarDados(){
+        try (FileReader fin = new FileReader("itens.txt");
+                BufferedReader bin = new BufferedReader(fin)) {
+            
+            String linha = bin.readLine();
+            while(linha != null){
+                String[] tokens = linha.split("\n");
+                String nome = tokens[0];
+                String matricula = tokens[1];
+                String dataNascimento = tokens[2];
+                
+                
+
+                
+
+                linha = bin.readLine();
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao carregar itens");
+        }
+    
 
     }
 

@@ -38,7 +38,8 @@ public class AppArvore {
 
                     System.out.println("Informe os dados do aluno: ");
                     System.out.print("Nome do aluno: ");
-                    nome = ler.next();
+                    ler.nextLine();
+                    nome = ler.nextLine();
 
                     System.out.println("Data de nascimento: ");
                     System.out.print("Dia: ");
@@ -64,15 +65,20 @@ public class AppArvore {
                     System.out.println("Informe o numero da matricula do aluno que deseja remover");
                     matricula = ler.nextInt();
                     String matriculaS = matricula + "";
+                    Aluno alunoAux = null;
                     if (arvore.remover(matriculaS)){
                         System.out.println("Aluno removido com sucesso");
                         for (Aluno aluno : alunos) {
                             if(matriculaS.equals(aluno.getMatricula())){
-                                alunos.remove(aluno);
-                                Arvore.salvarDados(alunos);
+                                alunoAux = aluno;
                             } 
 
                         }
+                        if(alunoAux != null){
+                            alunos.remove(alunoAux);
+                        }
+
+                        Arvore.salvarDados(alunos);
                             
                         
 
