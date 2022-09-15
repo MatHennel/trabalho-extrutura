@@ -6,9 +6,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.DocFlavor.STRING;
+
 public class Arvore {
 
     private Node raiz;
+    
 
     public Arvore() {
         this.raiz = null;
@@ -154,15 +157,15 @@ public class Arvore {
         }
     }
 
-    public static void salvarDados(List alunos) {
+    public void salvarDados(List alunos) {
         try (FileWriter fout = new FileWriter("alunos.txt");
                 BufferedWriter bout = new BufferedWriter(fout)) {
 
             ArrayList<Aluno> alunoS = new ArrayList<>(alunos);
 
             for (Aluno aluno : alunoS) {
-                bout.write("Nome: " + aluno.getNome() + "\n" + "Matricula: " + aluno.getMatricula() + "\n"
-                        + "Data de Nascimento: " + aluno.getDataNascimento() + "\n");
+                bout.write("Nome: " + aluno.getNome() + ";" + "Matricula: " + aluno.getMatricula() + ";"
+                        + "Data de Nascimento: " + aluno.getDataNascimento());
                 bout.newLine();
             }
 
@@ -172,28 +175,52 @@ public class Arvore {
 
     }
 
-    public void carregarDados(){
-        try (FileReader fin = new FileReader("itens.txt");
+    public List<Aluno> carregarDados(List<Aluno> alunos){
+        try (FileReader fin = new FileReader("alunos.txt");
                 BufferedReader bin = new BufferedReader(fin)) {
             
             String linha = bin.readLine();
+
             while(linha != null){
-                String[] tokens = linha.split("\n");
-                String nome = tokens[0];
+                String[] tokens = linha.split(";");
+                String nomeToken = tokens[0];
+                String[] nomeSujo = nomeToken.split(": ");
+                String nome = nomeSujo[1];
                 String matricula = tokens[1];
-                String dataNascimento = tokens[2];
-                
+                String dataNascimentoToken = tokens[2];
                 
 
+                String[] dataNascimentoSeparado = dataNascimentoToken.split(": ");
+                String[] dataNascimentoSeparadoNum = dataNascimentoSeparado[1].split("/");
+
+                int dia = Integer.parseInt(dataNascimentoSeparadoNum[0]);
+                int mes = Integer.parseInt(dataNascimentoSeparadoNum[1]);
+                int ano = Integer.parseInt(dataNascimentoSeparadoNum[2]);
+
+                DataNascimento dataNascimento = new DataNascimento(dia, mes, ano);
                 
+                Aluno aluno = new Aluno(matricula, nome, dataNascimento);
+                
+                alunos.add(aluno);
+
+
+    
 
                 linha = bin.readLine();
+
+
             }
+
+            return alunos;
+
 
         } catch (IOException e) {
             System.out.println("Erro ao carregar itens");
+            e.printStackTrace();
+            return null;
+
         }
-    
+        
 
     }
 

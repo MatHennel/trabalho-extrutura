@@ -3,8 +3,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-public class AppArvore {
-    public static void main(String[] args) {
+public class AppArvore{
+
+    
+    public static void main(String[] args){
 
         Scanner ler = new Scanner(System.in);
         Arvore arvore = new Arvore();
@@ -18,6 +20,11 @@ public class AppArvore {
         Random random = new Random();
 
         List<Aluno> alunos = new ArrayList<>();
+        
+
+        alunos = arvore.carregarDados(alunos);
+
+        
 
         System.out.println("Arvore Binaria de Aluno");
 
@@ -57,7 +64,7 @@ public class AppArvore {
                     String pausa = ler.next();
                     arvore.adicionar(novoAluno);
 
-                    Arvore.salvarDados(alunos);
+                    arvore.salvarDados(alunos);
 
                     break;
                 }
@@ -78,7 +85,7 @@ public class AppArvore {
                             alunos.remove(alunoAux);
                         }
 
-                        Arvore.salvarDados(alunos);
+                        arvore.salvarDados(alunos);
                             
                         
 
@@ -113,5 +120,7 @@ public class AppArvore {
             } // fim switch
         } while (opcao != 5);
     }
+
+    
 
 }
